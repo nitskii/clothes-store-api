@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateClothingDto } from './dto/create-clothing.dto';
 import { UpdateClothingDto } from './dto/update-clothing.dto';
@@ -15,8 +15,14 @@ export class ClothesService {
     return this.db.clothing.findMany();
   }
 
-  findOne(id: string) {
-    return this.db.clothing.findUnique({ where: { id } });
+  async findOne(id: string) {
+    const clothing = await this.db.clothing.findUnique({ where: { id } });
+
+    if (clothing === null) {
+      throw new NotFoundException(`Clothing with id '${id}' does not exist`);
+    }
+
+    return clothing;
   }
 
   update(id: string, changes: UpdateClothingDto) {
