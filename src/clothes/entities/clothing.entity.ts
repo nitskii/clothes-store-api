@@ -1,6 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Clothing } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
+import { Clothing, Prisma } from "@prisma/client";
 
 export class ClothingEntity implements Clothing {
   @ApiProperty({ format: 'uuid' })
@@ -16,7 +15,7 @@ export class ClothingEntity implements Clothing {
   images: string[];
 
   @ApiProperty({ type: 'number', format: 'currency' })
-  price: Decimal;
+  price: Prisma.Decimal;
 
   @ApiProperty({ minItems: 1, items: { type: 'string', minLength: 1 } })
   sizes: string[];
