@@ -13,7 +13,7 @@ export class ClothingEntity implements Clothing {
   description: string;
 
   @ApiProperty()
-  image: string;
+  images: string[];
 
   @ApiProperty({ type: 'number', format: 'double' })
   price: Decimal;

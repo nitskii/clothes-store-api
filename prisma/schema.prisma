@@ -28,7 +28,7 @@ model Clothing {
   id          String   @id @default(uuid()) @db.Uuid
   name        String
   description String
-  image       String
+  images      String[]
   price       Decimal  @db.Money
   sizes       String[]
   category    String

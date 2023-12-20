@@ -17,10 +17,10 @@ export class CreateClothingDto {
   @ApiProperty({ minLength: 1 })
   description: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ minLength: 1 })
-  image: string;
+  @IsString({ each: true })
+  @ArrayMinSize(1)
+  @ApiProperty({ minItems: 1, items: { type: 'string', minLength: 1 } })
+  images: string[];
 
   @IsCurrency({ allow_negatives: false })
   @ApiProperty()
