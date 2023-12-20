@@ -25,8 +25,8 @@ export class ClothesController {
 
   @Post()
   @ApiCreatedResponse({ type: ClothingEntity })
-  create(@Body() createClothingDto: CreateClothingDto) {
-    return this.clothesService.create(createClothingDto);
+  create(@Body() clothing: CreateClothingDto) {
+    return this.clothesService.create(clothing);
   }
 
   @Get()
@@ -45,9 +45,9 @@ export class ClothesController {
   @ApiOkResponse({ type: ClothingEntity })
   update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateClothingDto: UpdateClothingDto
+    @Body() changes: UpdateClothingDto
   ) {
-    return this.clothesService.update(id, updateClothingDto);
+    return this.clothesService.update(id, changes);
   }
 
   @Delete(':id')
