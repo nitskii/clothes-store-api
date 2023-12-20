@@ -1,5 +1,18 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post
+} from '@nestjs/common';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags
+} from '@nestjs/swagger';
 import { ClothesService } from './clothes.service';
 import { CreateClothingDto } from './dto/create-clothing.dto';
 import { UpdateClothingDto } from './dto/update-clothing.dto';
@@ -24,19 +37,22 @@ export class ClothesController {
 
   @Get(':id')
   @ApiOkResponse({ type: ClothingEntity })
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.clothesService.findOne(id);
   }
 
   @Patch(':id')
   @ApiOkResponse({ type: ClothingEntity })
-  update(@Param('id') id: string, @Body() updateClothingDto: UpdateClothingDto) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateClothingDto: UpdateClothingDto
+  ) {
     return this.clothesService.update(id, updateClothingDto);
   }
 
   @Delete(':id')
   @ApiOkResponse({ type: ClothingEntity })
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.clothesService.remove(id);
   }
 }

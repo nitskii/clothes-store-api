@@ -1,30 +1,53 @@
 import { ApiProperty } from "@nestjs/swagger";
+import {
+  ArrayMinSize,
+  IsCurrency,
+  IsNotEmpty,
+  IsString
+} from "class-validator";
 
 export class CreateClothingDto {
-  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ minLength: 1 })
   name: string;
 
-  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ minLength: 1 })
   description: string;
 
-  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ minLength: 1 })
   image: string;
 
+  @IsCurrency({ allow_negatives: false })
   @ApiProperty()
   price: number;
 
-  @ApiProperty()
+  @IsString({ each: true })
+  @ArrayMinSize(1)
+  @ApiProperty({ minItems: 1, items: { type: 'string', minLength: 1 } })
   sizes: string[];
 
-  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ minLength: 1 })
   category: string;
 
-  @ApiProperty()
+  @IsString({ each: true })
+  @ArrayMinSize(1)
+  @ApiProperty({ minItems: 1, items: { type: 'string', minLength: 1 } })
   colors: string[];
 
-  @ApiProperty()
+  @IsString({ each: true })
+  @ArrayMinSize(1)
+  @ApiProperty({ minItems: 1, items: { type: 'string', minLength: 1 } })
   materials: string[];
 
-  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({ minLength: 1 })
   brand: string;
 }
