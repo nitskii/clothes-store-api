@@ -4,7 +4,7 @@ import { CreateClothingDto } from './dto/create-clothing.dto';
 import { UpdateClothingDto } from './dto/update-clothing.dto';
 @Injectable()
 export class ClothesService {
-  constructor (private readonly db: PrismaService) {}
+  constructor(private readonly db: PrismaService) { }
 
   create(clothing: CreateClothingDto) {
     return this.db.clothing.create({ data: clothing });

@@ -20,7 +20,7 @@ export class ClothingEntity implements Clothing {
 
   @ApiProperty()
   sizes: string[];
-  
+
   @ApiProperty()
   category: string;
 

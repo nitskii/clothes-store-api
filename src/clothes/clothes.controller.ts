@@ -8,7 +8,7 @@ import { ClothingEntity } from './entities/clothing.entity';
 @Controller('clothes')
 @ApiTags('clothes')
 export class ClothesController {
-  constructor(private readonly clothesService: ClothesService) {}
+  constructor(private readonly clothesService: ClothesService) { }
 
   @Post()
   @ApiCreatedResponse({ type: ClothingEntity })

@@ -8,4 +8,4 @@ import { ClothesService } from './clothes.service';
   providers: [ClothesService],
   imports: [PrismaModule]
 })
-export class ClothesModule {}
+export class ClothesModule { }

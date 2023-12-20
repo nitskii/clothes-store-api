@@ -3,7 +3,7 @@ import { ApiProperty } from "@nestjs/swagger";
 export class CreateClothingDto {
   @ApiProperty()
   name: string;
-  
+
   @ApiProperty()
   description: string;
 
