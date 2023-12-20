@@ -6,31 +6,31 @@ export class ClothingEntity implements Clothing {
   @ApiProperty({ format: 'uuid' })
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({ minLength: 1 })
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ minLength: 1 })
   description: string;
 
-  @ApiProperty()
+  @ApiProperty({ minItems: 1, items: { type: 'string', minLength: 1 } })
   images: string[];
 
-  @ApiProperty({ type: 'number', format: 'double' })
+  @ApiProperty({ type: 'number', format: 'currency' })
   price: Decimal;
 
-  @ApiProperty()
+  @ApiProperty({ minItems: 1, items: { type: 'string', minLength: 1 } })
   sizes: string[];
 
-  @ApiProperty()
+  @ApiProperty({ minLength: 1 })
   category: string;
 
-  @ApiProperty()
+  @ApiProperty({ minItems: 1, items: { type: 'string', minLength: 1 } })
   colors: string[];
 
-  @ApiProperty()
+  @ApiProperty({ minItems: 1, items: { type: 'string', minLength: 1 } })
   materials: string[];
 
-  @ApiProperty()
+  @ApiProperty({ minLength: 1 })
   brand: string;
 
   @ApiProperty()
