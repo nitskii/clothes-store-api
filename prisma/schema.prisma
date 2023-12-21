@@ -19,7 +19,6 @@ model User {
   email     String  @unique
   role      Role    @default(USER)
   password  String
-  salt      String
 
   @@map("users")
 }

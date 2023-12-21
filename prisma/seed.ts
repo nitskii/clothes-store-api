@@ -4,8 +4,6 @@ import { genSalt, hash } from 'bcrypt';
 const db = new PrismaClient();
 
 (async () => {
-  const salt = await genSalt();
-
   await db.user.upsert({
     where: {
       email: process.env.ADMIN_SEED_EMAIL
@@ -16,8 +14,7 @@ const db = new PrismaClient();
       lastName: 'Miller',
       email: process.env.ADMIN_SEED_EMAIL!,
       role: 'ADMIN',
-      password: await hash(process.env.ADMIN_SEED_PASSWORD!, salt),
-      salt: salt
+      password: await hash(process.env.ADMIN_SEED_PASSWORD!, await genSalt())
     }
   });
 })()

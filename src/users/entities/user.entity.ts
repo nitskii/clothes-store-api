@@ -24,7 +24,4 @@ export class UserEntity implements User {
 
   @Exclude()
   password: string;
-
-  @Exclude()
-  salt: string;
 }

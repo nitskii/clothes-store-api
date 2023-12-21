@@ -9,13 +9,10 @@ export class UsersService {
   constructor(private readonly db: PrismaService) { }
 
   async create(user: CreateUserDto) {
-    const salt = await genSalt(10);
-
     return this.db.user.create({
       data: {
         ...user,
-        password: await hash(user.password, salt),
-        salt
+        password: await hash(user.password, await genSalt()),
       }
     });
   }
