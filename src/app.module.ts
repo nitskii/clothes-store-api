@@ -1,5 +1,6 @@
 import { ClassSerializerInterceptor, Module, ValidationPipe } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { AuthModule } from './auth/auth.module';
 import { ClothesModule } from './clothes/clothes.module';
 import { PrismaClientExceptionFilter } from './prisma-client-exception/prisma-client-exception.filter';
 import { PrismaModule } from './prisma/prisma.module';
@@ -22,6 +23,7 @@ import { UsersModule } from './users/users.module';
   ],
   imports: [
     PrismaModule,
+    AuthModule,
     UsersModule,
     ClothesModule
   ]
