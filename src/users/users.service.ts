@@ -31,7 +31,14 @@ export class UsersService {
     return user;
   }
 
-  update(id: string, changes: UpdateUserDto) {
+  async update(id: string, changes: UpdateUserDto) {
+    if (changes.password) {
+      changes.password = await hash(
+        changes.password,
+        await genSalt()
+      );
+    }
+
     return this.db.user.update({
       where: { id },
       data: changes
