@@ -6,13 +6,19 @@ import {
   Param,
   ParseUUIDPipe,
   Patch,
-  Post
+  Post,
+  UseGuards
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiTags
 } from '@nestjs/swagger';
+import { Decimal } from '@prisma/client/runtime/library';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { ClothesService } from './clothes.service';
 import { CreateClothingDto } from './dto/create-clothing.dto';
 import { UpdateClothingDto } from './dto/update-clothing.dto';
@@ -24,8 +30,12 @@ export class ClothesController {
   constructor(private readonly clothesService: ClothesService) { }
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
+  @ApiBearerAuth()
   @ApiCreatedResponse({ type: ClothingEntity })
   create(@Body() clothing: CreateClothingDto) {
+
     return this.clothesService.create(clothing);
   }
 
@@ -42,6 +52,9 @@ export class ClothesController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
+  @ApiBearerAuth()
   @ApiOkResponse({ type: ClothingEntity })
   update(
     @Param('id', ParseUUIDPipe) id: string,
@@ -51,6 +64,9 @@ export class ClothesController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
+  @ApiBearerAuth()
   @ApiOkResponse({ type: ClothingEntity })
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.clothesService.remove(id);
