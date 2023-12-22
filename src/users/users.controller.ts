@@ -16,6 +16,7 @@ import {
   ApiTags
 } from '@nestjs/swagger';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { AccountOwnerOrAdminGuard } from 'src/auth/guards/account-owner-or-admin.guard';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -46,7 +47,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity })
   async findOne(@Param('id', ParseUUIDPipe) id: string) {
@@ -54,7 +56,7 @@ export class UsersController {
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AccountOwnerOrAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity })
   async update(
@@ -65,7 +67,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, AccountOwnerOrAdminGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: UserEntity })
   async remove(@Param('id', ParseUUIDPipe) id: string) {
