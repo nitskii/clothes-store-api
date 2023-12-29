@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaModule } from '../prisma/prisma.module';
+import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 
 describe(UsersService.name, () => {
@@ -16,7 +17,14 @@ describe(UsersService.name, () => {
     service = module.get(UsersService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  it('creates new user', async () => {
+    const user = new CreateUserDto();
+
+    user.email = "andrew.garfield@example.com";
+    user.firstName = "Andrew";
+    user.lastName = "Garfield";
+    user.password = "qwerty123";
+
+    expect(await service.create(user)).toHaveProperty('id');
   });
 });
