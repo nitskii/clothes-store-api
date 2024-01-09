@@ -114,5 +114,14 @@ describe(UsersService.name, () => {
     expect(id).toEqual(userId);
   });
 
+  it('throws an error when trying to delete a non-existing user', async () => {
+    try {
+      await service.remove("NON_EXISTING_ID");
+    } catch (err) {
+      expect(err)
+        .toBeInstanceOf(PrismaClientKnownRequestError);
+    }
+  });
+
   afterAll(async () => await service.removeAll());
 });
