@@ -27,17 +27,24 @@ describe(UsersService.name, () => {
     user.lastName = "User";
     user.password = "qwerty123";
 
-    const result = await service.create(user);
+    const { id } = await service.create(user);
+    const uuidPattern = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
-    expect(result).toHaveProperty('id');
+    expect(id).toMatch(uuidPattern);
 
-    userId = result.id;
+    userId = id;
   });
 
   it('finds existing user', async () => {
-    const result = await service.findOne(userId);
+    const { id } = await service.findOne(userId);
 
-    expect(result.id).toEqual(userId);
+    expect(id).toEqual(userId);
+  });
+
+  it('deletes existing user', async () => {
+    const { id } = await service.remove(userId);
+
+    expect(id).toEqual(userId);
   });
 
   afterAll(async () => {
