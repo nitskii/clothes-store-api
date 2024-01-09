@@ -74,6 +74,17 @@ describe(UsersService.name, () => {
     }
   });
 
+  it('updates existing user email', async () => {
+    const newEmail = "new.email@example.com";
+
+    const { email } = await service.update(
+      userId,
+      { email: newEmail }
+    );
+
+    expect(email).toEqual(newEmail);
+  });
+
   it('deletes existing user', async () => {
     const { id } = await service.remove(userId);
 
