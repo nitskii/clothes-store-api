@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaModule } from '../prisma/prisma.module';
@@ -52,10 +53,25 @@ describe(UsersService.name, () => {
     }
   });
 
+  it('finds all users', async () => {
+    const result = await service.findAll();
+
+    expect(result).toBeInstanceOf(Array);
+  });
+
   it('finds existing user', async () => {
     const { id } = await service.findOne(userId);
 
     expect(id).toEqual(userId);
+  });
+
+  it('throws an error when a user is not found', async () => {
+    try {
+      await service.findOne("NON_EXISTING_ID");
+    } catch (err) {
+      expect(err)
+        .toBeInstanceOf(PrismaClientKnownRequestError);
+    }
   });
 
   it('deletes existing user', async () => {
@@ -64,7 +80,5 @@ describe(UsersService.name, () => {
     expect(id).toEqual(userId);
   });
 
-  afterAll(async () => {
-    await service.removeAll();
-  });
+  afterAll(async () => await service.removeAll());
 });
