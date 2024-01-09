@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { PrismaModule } from '../prisma/prisma.module';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -33,6 +34,22 @@ describe(UsersService.name, () => {
     expect(id).toMatch(uuidPattern);
 
     userId = id;
+  });
+
+  it('throws an error when trying to create a user with existing email', async () => {
+    const user = new CreateUserDto();
+
+    user.email = "test.user@example.com";
+    user.firstName = "Test";
+    user.lastName = "User";
+    user.password = "qwerty123";
+
+    try {
+      await service.create(user);
+    } catch (err) {
+      expect(err)
+        .toBeInstanceOf(PrismaClientKnownRequestError);
+    }
   });
 
   it('finds existing user', async () => {
