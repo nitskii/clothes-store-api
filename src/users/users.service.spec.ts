@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { Prisma } from '@prisma/client';
 import { compare } from 'bcrypt';
 import { PrismaModule } from '../prisma/prisma.module';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -49,7 +49,7 @@ describe(UsersService.name, () => {
       await service.create(user);
     } catch (err) {
       expect(err)
-        .toBeInstanceOf(PrismaClientKnownRequestError);
+        .toBeInstanceOf(Prisma.PrismaClientKnownRequestError);
     }
   });
 
@@ -70,7 +70,7 @@ describe(UsersService.name, () => {
       await service.findOne("NON_EXISTING_ID");
     } catch (err) {
       expect(err)
-        .toBeInstanceOf(PrismaClientKnownRequestError);
+        .toBeInstanceOf(Prisma.PrismaClientKnownRequestError);
     }
   });
 
@@ -104,7 +104,7 @@ describe(UsersService.name, () => {
       );
     } catch (err) {
       expect(err)
-        .toBeInstanceOf(PrismaClientKnownRequestError);
+        .toBeInstanceOf(Prisma.PrismaClientKnownRequestError);
     }
   });
 
@@ -119,7 +119,7 @@ describe(UsersService.name, () => {
       await service.remove("NON_EXISTING_ID");
     } catch (err) {
       expect(err)
-        .toBeInstanceOf(PrismaClientKnownRequestError);
+        .toBeInstanceOf(Prisma.PrismaClientKnownRequestError);
     }
   });
 
