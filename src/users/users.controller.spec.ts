@@ -1,5 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaModule } from '../prisma/prisma.module';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UserEntity } from './entities/user.entity';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
@@ -18,7 +20,18 @@ describe(UsersController.name, () => {
     controller = module.get(UsersController);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it('creates new user', async () => {
+    const user = new CreateUserDto();
+
+    user.email = 'test.user@example.com';
+    user.firstName = 'Test';
+    user.lastName = 'User';
+    user.password = 'qwerty123';
+
+    const result = await controller.create(user);
+
+    expect(result).toBeInstanceOf(UserEntity);
   });
+
+  afterAll(async () => await controller.removeAll());
 });
