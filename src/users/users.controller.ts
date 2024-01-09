@@ -73,4 +73,8 @@ export class UsersController {
   async remove(@Param('id', ParseUUIDPipe) id: string) {
     return new UserEntity(await this.usersService.remove(id));
   }
+
+  async removeAll() {
+    return await this.usersService.removeAll();
+  };
 }
