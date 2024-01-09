@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { compare } from 'bcrypt';
 import { PrismaModule } from '../prisma/prisma.module';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
@@ -82,6 +83,29 @@ describe(UsersService.name, () => {
     );
 
     expect(email).toEqual(newEmail);
+  });
+
+  it('updates existing user password', async () => {
+    const newPassword = "asdfg456";
+
+    const { password } = await service.update(
+      userId,
+      { password: newPassword }
+    );
+
+    expect(await compare(newPassword, password)).toEqual(true);
+  });
+
+  it('throws an error when trying to update a non-existing user', async () => {
+    try {
+      await service.update(
+        "NON_EXISTING_ID",
+        { firstName: "User" }
+      );
+    } catch (err) {
+      expect(err)
+        .toBeInstanceOf(PrismaClientKnownRequestError);
+    }
   });
 
   it('deletes existing user', async () => {
