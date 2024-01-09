@@ -3,6 +3,7 @@ import { genSalt, hash } from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -51,5 +52,9 @@ export class UsersService {
 
   remove(id: string) {
     return this.db.user.delete({ where: { id } });
+  }
+
+  removeAll() {
+    return this.db.user.deleteMany();
   }
 }

@@ -20,11 +20,17 @@ describe(UsersService.name, () => {
   it('creates new user', async () => {
     const user = new CreateUserDto();
 
-    user.email = "andrew.garfield@example.com";
-    user.firstName = "Andrew";
-    user.lastName = "Garfield";
+    user.email = "test.user@example.com";
+    user.firstName = "Test";
+    user.lastName = "User";
     user.password = "qwerty123";
 
-    expect(await service.create(user)).toHaveProperty('id');
+    const result = await service.create(user);
+
+    expect(result).toHaveProperty('id');
+  });
+
+  afterAll(async () => {
+    await service.removeAll();
   });
 });

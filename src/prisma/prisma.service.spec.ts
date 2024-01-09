@@ -15,7 +15,6 @@ describe(PrismaService.name, () => {
   });
 
   it('should be defined', () => {
-    console.log(process.env.POSTGRES_DB);
     expect(service).toBeDefined();
   });
 });
