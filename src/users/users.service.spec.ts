@@ -17,6 +17,8 @@ describe(UsersService.name, () => {
     service = module.get(UsersService);
   });
 
+  let userId: string;
+
   it('creates new user', async () => {
     const user = new CreateUserDto();
 
@@ -28,6 +30,14 @@ describe(UsersService.name, () => {
     const result = await service.create(user);
 
     expect(result).toHaveProperty('id');
+
+    userId = result.id;
+  });
+
+  it('finds existing user', async () => {
+    const result = await service.findOne(userId);
+
+    expect(result.id).toEqual(userId);
   });
 
   afterAll(async () => {
