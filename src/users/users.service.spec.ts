@@ -26,7 +26,7 @@ describe(UsersService.name, () => {
     db = moduleRef.get(PrismaService);
   });
 
-  let userId: string;
+  const userId = randomUUID();
 
   it('creates new user', async () => {
     const user = {
@@ -51,24 +51,18 @@ describe(UsersService.name, () => {
     const actualResult = await service.create(user);
 
     expect(actualResult).toEqual(expectedResult);
-
-    userId = actualResult.id;
   });
 
   it('throws an error when trying to create a user with existing email', async () => {
-    const user = new CreateUserDto();
+    const user = {
+      email: 'test.user@example.com',
+      firstName: 'Test',
+      lastName: 'User',
+      password: 'qwerty123'
+    } satisfies CreateUserDto;
 
-    user.email = "test.user@example.com";
-    user.firstName = "Test";
-    user.lastName = "User";
-    user.password = "qwerty123";
-
-    try {
-      await service.create(user);
-    } catch (err) {
-      expect(err)
-        .toBeInstanceOf(Prisma.PrismaClientKnownRequestError);
-    }
+    expect(async () => await service.create(user))
+      .toThrow(Prisma.PrismaClientKnownRequestError);
   });
 
   it('finds all users', async () => {
