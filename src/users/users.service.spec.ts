@@ -1,40 +1,58 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Prisma } from '@prisma/client';
-import { compare } from 'bcrypt';
+import { Prisma, PrismaClient, Role } from '@prisma/client';
+import { compare, genSalt, hash } from 'bcrypt';
+import { randomUUID } from 'crypto';
+import { DeepMockProxy, mockDeep } from 'jest-mock-extended';
 import { PrismaModule } from '../prisma/prisma.module';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 
 describe(UsersService.name, () => {
   let service: UsersService;
+  let db: DeepMockProxy<PrismaService>;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test
+    const moduleRef: TestingModule = await Test
       .createTestingModule({
         imports: [PrismaModule],
         providers: [UsersService]
       })
+      .overrideProvider(PrismaService)
+      .useValue(mockDeep<PrismaClient>())
       .compile();
 
-    service = module.get(UsersService);
+    service = moduleRef.get(UsersService);
+    db = moduleRef.get(PrismaService);
   });
 
   let userId: string;
 
   it('creates new user', async () => {
-    const user = new CreateUserDto();
+    const user = {
+      email: 'test.user@example.com',
+      firstName: 'Test',
+      lastName: 'User',
+      password: 'qwerty123'
+    } satisfies CreateUserDto;
 
-    user.email = "test.user@example.com";
-    user.firstName = "Test";
-    user.lastName = "User";
-    user.password = "qwerty123";
+    const expectedResult = {
+      id: randomUUID(),
+      ...user,
+      password: await hash(
+        user.password,
+        await genSalt()
+      ),
+      role: Role.USER
+    };
 
-    const { id } = await service.create(user);
-    const uuidPattern = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+    db.user.create.mockResolvedValueOnce(expectedResult);
 
-    expect(id).toMatch(uuidPattern);
+    const actualResult = await service.create(user);
 
-    userId = id;
+    expect(actualResult).toEqual(expectedResult);
+
+    userId = actualResult.id;
   });
 
   it('throws an error when trying to create a user with existing email', async () => {
