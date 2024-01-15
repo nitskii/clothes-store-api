@@ -1,8 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
 import {
   ArrayMinSize,
-  IsCurrency,
   IsNotEmpty,
+  IsNumber,
+  IsPositive,
   IsString
 } from "class-validator";
 
@@ -22,7 +23,11 @@ export class CreateClothingDto {
   @ApiProperty({ minItems: 1, items: { type: 'string', minLength: 1 } })
   images: string[];
 
-  @IsCurrency({ allow_negatives: false })
+  @IsNumber(
+    { maxDecimalPlaces: 2, allowInfinity: false, allowNaN: false },
+    { message: 'price must be a finite number with 0 to 2 digits after decimal' }
+  )
+  @IsPositive()
   @ApiProperty()
   price: number;
 

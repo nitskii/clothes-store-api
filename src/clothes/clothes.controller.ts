@@ -7,7 +7,8 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
-  UseGuards
+  UseGuards,
+  UseInterceptors
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -22,9 +23,11 @@ import { ClothesService } from './clothes.service';
 import { CreateClothingDto } from './dto/create-clothing.dto';
 import { UpdateClothingDto } from './dto/update-clothing.dto';
 import { ClothingEntity } from './entities/clothing.entity';
+import { ClothingPriceInterceptor } from './interceptors/clothing-price.interceptor';
 
 @Controller('clothes')
 @ApiTags('clothes')
+@UseInterceptors(ClothingPriceInterceptor)
 export class ClothesController {
   constructor(private readonly clothesService: ClothesService) { }
 
@@ -34,7 +37,6 @@ export class ClothesController {
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: ClothingEntity })
   create(@Body() clothing: CreateClothingDto) {
-
     return this.clothesService.create(clothing);
   }
 
